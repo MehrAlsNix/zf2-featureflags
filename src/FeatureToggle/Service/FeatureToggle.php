@@ -6,6 +6,6 @@ class FeatureToggle
 {
     public function __construct()
     {
-        new
+
     }
 }

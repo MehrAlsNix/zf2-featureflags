@@ -15,8 +15,9 @@ class UserContextFactory extends ContextFactory
     {
         $this->tokenStorage = $storage;
     }
+
     /**
-     * {@inheritDoc}
+     * @return Context
      */
     public function createContext()
     {

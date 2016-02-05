@@ -15,8 +15,6 @@ class ToggleListener extends AbstractListenerAggregate
 
     private $context;
 
-    private $listeners = [];
-
     public function __construct(ToggleManager $toggleManager, Context $context)
     {
         $this->toggleManager = $toggleManager;
@@ -33,21 +31,20 @@ class ToggleListener extends AbstractListenerAggregate
         $classHolder = $event->getTarget();
         $classAnnotations = $classHolder->getAnnotations();
         foreach ($classAnnotations as $annotation) {
-            if ($annotation instanceof Toggle) {
-                $controller = $classHolder->getClass()->getName();
-                if (! $this->toggleManager->active($annotation->name, $this->context)) {
-                    throw new \RuntimeException();
-                }
+            if ($annotation instanceof Toggle
+                && !$this->toggleManager->active($annotation->name, $this->context)
+            ) {
+                throw new \RuntimeException();
             }
         }
 
-        $methodHolders = $classHolder->getMethods();;
+        $methodHolders = $classHolder->getMethods();
         foreach ($methodHolders as $methodHolder) {
             foreach ($methodHolder->getAnnotations() as $annotation) {
-                if ($annotation instanceof Toggle) {
-                    if (! $this->toggleManager->active($annotation->name, $this->context)) {
-                        throw new \RuntimeException();
-                    }
+                if ($annotation instanceof Toggle
+                    && !$this->toggleManager->active($annotation->name, $this->context)
+                ) {
+                    throw new \RuntimeException();
                 }
             }
         }
