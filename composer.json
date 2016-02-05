@@ -1,0 +1,21 @@
+{
+  "name": "mehr-als-nix/zf2-featureflags",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Siad Ardroumli",
+      "email": "siad.ardroumli@gmail.com"
+    }
+  ],
+  "require": {
+    "qandidate/toggle": "^0.4",
+    "zendframework/zend-servicemanager": "^3.0",
+    "zendframework/zend-modulemanager": "^2.6",
+    "zendframework/zend-authentication": "^2.5",
+    "alex-oleshkevich/zf-annotations": "^1.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8"
+  }
+}
