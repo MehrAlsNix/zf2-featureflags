@@ -28,6 +28,9 @@ class ToggleListener extends AbstractListenerAggregate
 {
     use ToggleAware;
 
+    /**
+     * @param EventManagerInterface $events
+     */
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(ParseEvent::EVENT_CLASS_PARSED, [$this, 'onClassParsed']);

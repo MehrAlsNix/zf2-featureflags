@@ -16,12 +16,29 @@
  * @link      http://github.com/MehrAlsNix/zf2-featureflags
  */
 
-namespace MehrAlsNix\FeatureToggle\Service;
+namespace MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin;
 
-class FeatureToggle
+use MehrAlsNix\FeatureToggle\Traits\ToggleAware;
+use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+
+class FeatureToggle extends AbstractPlugin
 {
-    public function __construct()
-    {
+    use ToggleAware;
 
+    /**
+     * @param string $name
+     * @return boolean
+     */
+    public function isActive($name)
+    {
+        return $this->toggleManager->active($name, $this->getContext());
+    }
+
+    /**
+     * @return $this
+     */
+    public function __invoke()
+    {
+        return $this;
     }
 }

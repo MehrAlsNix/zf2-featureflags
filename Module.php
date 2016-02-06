@@ -23,11 +23,20 @@ use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
-use Zend\ModuleManager\Listener\ConfigListener;
 
-class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface
+/**
+ * Class Module
+ *
+ * @package MehrAlsNix\FeatureToggle
+ */
+class Module implements ConfigProviderInterface,
+    AutoloaderProviderInterface,
+    ServiceProviderInterface,
+    ViewHelperProviderInterface,
+    ControllerPluginProviderInterface
 {
     /**
      * Retrieve autoloader configuration
@@ -96,6 +105,23 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
             'view_helpers' => [
                 'factories' => [
                     'FeatureToggle' => Factory\ToggleHelperFactory::class
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Expected to return \Zend\ServiceManager\Config object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Config
+     */
+    public function getControllerPluginConfig()
+    {
+        return [
+            'controller_plugins' => [
+                'factories' => [
+                    'FeatureToggle' => Factory\TogglePluginFactory::class
                 ]
             ]
         ];

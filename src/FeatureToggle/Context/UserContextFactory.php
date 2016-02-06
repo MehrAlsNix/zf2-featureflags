@@ -22,6 +22,9 @@ use Qandidate\Toggle\Context;
 use Qandidate\Toggle\ContextFactory;
 use Zend\Authentication\AuthenticationServiceInterface;
 
+/**
+ * {@inheritDoc}
+ */
 class UserContextFactory extends ContextFactory
 {
     /** @var AuthenticationServiceInterface $tokenStorage */
