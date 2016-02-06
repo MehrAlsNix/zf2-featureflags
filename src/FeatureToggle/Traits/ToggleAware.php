@@ -32,7 +32,7 @@ trait ToggleAware
     /**
      * @param ToggleManager $toggleManager
      */
-    public function setToggleMAnager(ToggleManager $toggleManager)
+    public function setToggleManager(ToggleManager $toggleManager)
     {
         $this->toggleManager = $toggleManager;
     }
@@ -48,7 +48,7 @@ trait ToggleAware
     /**
      * @return ToggleManager
      */
-    public function getToggleMAnager()
+    public function getToggleManager()
     {
         return $this->toggleManager;
     }

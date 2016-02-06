@@ -18,15 +18,13 @@
 
 namespace MehrAlsNix\FeatureToggle;
 
-use Qandidate\Toggle\Context;
+use MehrAlsNix\FeatureToggle\Context\UserContextFactory;
 use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
-use Qandidate\Toggle\ToggleManager;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface
 {
@@ -67,21 +65,19 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
         return [
             'service_manager' => [
                 'aliases' => [
-                    'Toggle\Collection' => 'Qandidate\Toggle\Collection\InMemory'
+                    'FeatureToggle\InMemory' => 'Qandidate\Toggle\Collection\InMemory',
+                    'FeatureToggle\Redis'    => 'Qandidate\Toggle\Collection\Predis'
                 ],
                 'services' => [
                     'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection()
                 ],
                 'factories' => [
-                    'Qandidate\Toggle\Manager' => function (ServiceLocatorInterface $serviceManager) {
-                        new ToggleManager($serviceManager->get('Toggle\Collection'));
+                    'ToggleFeature\UserContextFactory' => function ($serviceManager) {
+                        $storage = $serviceManager->get('Storage');
+                        return new UserContextFactory($storage);
                     },
-                    'Qandidate\Toggle\Context' => function (ServiceLocatorInterface $serviceManager) {
-                        new Context($serviceManager->get('Toggle\Collection'));
-                    }
-                ],
-                'invokables' => [
-
+                    'Qandidate\Toggle\Manager' => Factory\ToggleManagerFactory::class,
+                    'Qandidate\Toggle\Context' => Factory\ToggleContextFactory::class
                 ]
             ]
         ];
