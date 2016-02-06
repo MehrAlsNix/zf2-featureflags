@@ -3,23 +3,14 @@
 namespace MehrAlsNix\FeatureToggle\Listener;
 
 use MehrAlsNix\FeatureToggle\Annotation\Toggle;
-use Qandidate\Toggle\Context;
-use Qandidate\Toggle\ToggleManager;
+use MehrAlsNix\FeatureToggle\Traits\ToggleAware;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use ZfAnnotation\Event\ParseEvent;
 
 class ToggleListener extends AbstractListenerAggregate
 {
-    private $toggleManager;
-
-    private $context;
-
-    public function __construct(ToggleManager $toggleManager, Context $context)
-    {
-        $this->toggleManager = $toggleManager;
-        $this->context = $context;
-    }
+    use ToggleAware;
 
     public function attach(EventManagerInterface $events)
     {
@@ -32,7 +23,7 @@ class ToggleListener extends AbstractListenerAggregate
         $classAnnotations = $classHolder->getAnnotations();
         foreach ($classAnnotations as $annotation) {
             if ($annotation instanceof Toggle
-                && !$this->toggleManager->active($annotation->name, $this->context)
+                && !$this->toggleManager->active($annotation->getName(), $this->getContext())
             ) {
                 throw new \RuntimeException();
             }
@@ -42,7 +33,7 @@ class ToggleListener extends AbstractListenerAggregate
         foreach ($methodHolders as $methodHolder) {
             foreach ($methodHolder->getAnnotations() as $annotation) {
                 if ($annotation instanceof Toggle
-                    && !$this->toggleManager->active($annotation->name, $this->context)
+                    && !$this->toggleManager->active($annotation->getName(), $this->getContext())
                 ) {
                     throw new \RuntimeException();
                 }

@@ -2,12 +2,17 @@
 
 namespace MehrAlsNix\FeatureToggle;
 
+use Qandidate\Toggle\Context;
+use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
+use Qandidate\Toggle\ToggleManager;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface
+class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface
 {
     /**
      * Retrieve autoloader configuration
@@ -16,9 +21,13 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
      */
     public function getAutoloaderConfig()
     {
-        return array('Zend\Loader\StandardAutoloader' => array('namespaces' => array(
-            __NAMESPACE__ => __DIR__ . '/src/',
-        )));
+        return [
+            'Zend\Loader\StandardAutoloader' => [
+                'namespaces' => [
+                    __NAMESPACE__ => __DIR__ . '/src/',
+                ]
+            ]
+        ];
     }
 
     /**
@@ -41,11 +50,39 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
     {
         return [
             'service_manager' => [
+                'aliases' => [
+                    'Toggle\Collection' => 'Qandidate\Toggle\Collection\InMemory'
+                ],
                 'services' => [
-                    'qandidate.toggle.collection.in_memory' => new InMemoryCollection()
+                    'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection()
+                ],
+                'factories' => [
+                    'Qandidate\Toggle\Manager' => function (ServiceLocatorInterface $serviceManager) {
+                        new ToggleManager($serviceManager->get('Toggle\Collection'));
+                    },
+                    'Qandidate\Toggle\Context' => function (ServiceLocatorInterface $serviceManager) {
+                        new Context($serviceManager->get('Toggle\Collection'));
+                    }
                 ],
                 'invokables' => [
 
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Expected to return \Zend\ServiceManager\Config object or array to
+     * seed such an object.
+     *
+     * @return array|\Zend\ServiceManager\Config
+     */
+    public function getViewHelperConfig()
+    {
+        return [
+            'view_helpers' => [
+                'invokables' => [
+                    'FeatureToggle' => View\Helper\FeatureToggle::class
                 ]
             ]
         ];
