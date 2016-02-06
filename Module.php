@@ -25,6 +25,7 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
+use Zend\ModuleManager\Listener\ConfigListener;
 
 class Module implements ConfigProviderInterface, AutoloaderProviderInterface, ServiceProviderInterface, ViewHelperProviderInterface
 {
@@ -93,8 +94,8 @@ class Module implements ConfigProviderInterface, AutoloaderProviderInterface, Se
     {
         return [
             'view_helpers' => [
-                'invokables' => [
-                    'FeatureToggle' => View\Helper\FeatureToggle::class
+                'factories' => [
+                    'FeatureToggle' => Factory\ToggleHelperFactory::class
                 ]
             ]
         ];
