@@ -38,7 +38,7 @@ class ToggleContextFactory implements FactoryInterface
     {
         $toggleConfig = (array) $serviceLocator->get('config');
 
-        $factory = $toggleConfig['qandidate_toggle']['context_factory'];
+        $factory = $toggleConfig['zf2_featureflags']['qandidate_toggle']['context_factory'];
 
         $context = new Context();
 

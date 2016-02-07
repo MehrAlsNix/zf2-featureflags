@@ -18,13 +18,19 @@
 
 namespace MehrAlsNix\FeatureToggle;
 
+use Qandidate\Toggle\Serializer\InMemoryCollectionSerializer;
 use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
+use Zend\Console\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
+use Zend\ModuleManager\ModuleEvent;
+use Zend\ModuleManager\ModuleManagerInterface;
 
 /**
  * Class Module
@@ -35,8 +41,32 @@ class Module implements ConfigProviderInterface,
     AutoloaderProviderInterface,
     ServiceProviderInterface,
     ViewHelperProviderInterface,
-    ControllerPluginProviderInterface
+    ControllerPluginProviderInterface,
+    InitProviderInterface,
+    ConsoleUsageProviderInterface
 {
+    /**
+     * @param ModuleManagerInterface $moduleManager
+     */
+    public function init(ModuleManagerInterface $moduleManager)
+    {
+        $eventManager = $moduleManager->getEventManager();
+        $eventManager->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig']);
+    }
+
+    /**
+     * @param ModuleEvent $event
+     */
+    public function onMergeConfig(ModuleEvent $event)
+    {
+        $config = $event->getConfigListener()->getMergedConfig(false);
+
+        $event->
+        $serializer = new InMemoryCollectionSerializer();
+        $collection = $serializer->deserialize($data);
+        $manager    = new ToggleManager($collection);
+    }
+
     /**
      * Retrieve autoloader configuration
      *
@@ -78,7 +108,8 @@ class Module implements ConfigProviderInterface,
                     'FeatureToggle\Redis'    => 'Qandidate\Toggle\Collection\Predis'
                 ],
                 'services' => [
-                    'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection()
+                    'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection(),
+                    'Qandidate\Toggle\Serializer\InMemoryCollectionSerializer' => new InMemoryCollectionSerializer(),
                 ],
                 'factories' => [
                     'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
@@ -121,5 +152,33 @@ class Module implements ConfigProviderInterface,
                 ]
             ]
         ];
+    }
+
+    /**
+     * Returns an array or a string containing usage information for this module's Console commands.
+     * The method is called with active Zend\Console\Adapter\AdapterInterface that can be used to directly access
+     * Console and send output.
+     *
+     * If the result is a string it will be shown directly in the console window.
+     * If the result is an array, its contents will be formatted to console window width. The array must
+     * have the following format:
+     *
+     *     return array(
+     *                'Usage information line that should be shown as-is',
+     *                'Another line of usage info',
+     *
+     *                '--parameter'        =>   'A short description of that parameter',
+     *                '-another-parameter' =>   'A short description of another parameter',
+     *                ...
+     *            )
+     *
+     * @param AdapterInterface $console
+     * @return array|string|null
+     */
+    public function getConsoleUsage(AdapterInterface $console)
+    {
+        return array(
+            'config dump' => 'Compiles config and dump into cache file.',
+        );
     }
 }

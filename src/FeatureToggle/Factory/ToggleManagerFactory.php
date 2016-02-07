@@ -39,7 +39,7 @@ class ToggleManagerFactory implements FactoryInterface
     {
         $toggleConfig = (array) $serviceLocator->get('config');
 
-        $persistence = $toggleConfig['qandidate_toggle']['persistence'];
+        $persistence = $toggleConfig['zf2_featureflags']['qandidate_toggle']['persistence'];
 
         /** @var ToggleCollection $coll */
         $coll = $serviceLocator->get($persistence);
