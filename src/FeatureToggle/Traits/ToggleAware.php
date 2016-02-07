@@ -60,4 +60,13 @@ trait ToggleAware
     {
         return $this->context;
     }
+
+    /**
+     * @param string $name
+     * @return boolean
+     */
+    public function isActive($name)
+    {
+        return $this->toggleManager->active($name, $this->getContext());
+    }
 }

@@ -26,15 +26,6 @@ class FeatureToggle extends AbstractPlugin
     use ToggleAware;
 
     /**
-     * @param string $name
-     * @return boolean
-     */
-    public function isActive($name)
-    {
-        return $this->toggleManager->active($name, $this->getContext());
-    }
-
-    /**
      * @return $this
      */
     public function __invoke()
