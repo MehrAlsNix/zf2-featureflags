@@ -1,3 +1,25 @@
 <?php
 
-return [];
+return [
+    'zf2_featureflags' => [
+        'qandidate_toggle' => [
+            'persistence' => 'ToggleFeature\InMemory', // 'ToggleFeature\Redis'
+            'context_factory' => 'ToggleFeature\UserContextFactory', // |your.context_factory.service.id
+            'redis_namespace' => null, // toggle_%kernel.environment% # default, only required when persistence = redis
+            'redis_client' => null // |your.redis_client.service.id # only required when persistence = redis
+        ],
+        'features' => [
+            'some-feature' => [
+                'name' => 'toggling',
+                'conditions' => [
+                    [
+                        'name' => 'operator-condition',
+                        'key' => 'user_id',
+                        'operator' => ['name' => 'greater-than', 'value' => 41],
+                    ],
+                ],
+                'status' => 'conditionally-active',
+            ]
+        ]
+    ]
+];

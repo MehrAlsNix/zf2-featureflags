@@ -18,7 +18,11 @@
     "alex-oleshkevich/zf-annotations": "^1.2"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "zendframework/zend-test": "^2.5",
+    "zendframework/zend-log": "^2.6",
+    "zendframework/zend-serializer": "^2.6",
+    "zendframework/zend-i18n": "^2.5"
   },
   "autoload": {
     "psr-4": {
