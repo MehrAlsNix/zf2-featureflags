@@ -19,8 +19,8 @@ class FeatureToggleTest extends \PHPUnit_Framework_TestCase
         $this->context = $context;
         $helper->setToggleManager($toggleManager);
         $helper->setContext($context);
-
     }
+
     /**
      * @test
      */
@@ -28,5 +28,15 @@ class FeatureToggleTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->helper->__invoke();
         $this->assertInstanceOf('MehrAlsNix\FeatureToggle\View\Helper\FeatureToggle', $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getterSetter()
+    {
+        $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->helper->getToggleManager());
+        $this->assertInstanceOf('Qandidate\Toggle\Context', $this->helper->getContext());
+        $this->assertNull($this->helper->isActive('test'));
     }
 }
