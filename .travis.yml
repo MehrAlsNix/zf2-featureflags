@@ -25,7 +25,7 @@ install:
 
 script:
   - cd ./tests/
-  - phpunit --coverage-clover build/logs/clover.xml
+  - phpunit --coverage-clover ../build/logs/clover.xml
   - cd ../
 
 after_script:
