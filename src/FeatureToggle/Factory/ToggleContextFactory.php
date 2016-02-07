@@ -40,6 +40,8 @@ class ToggleContextFactory implements FactoryInterface
 
         $hasDefaultGlobalContextFactory = isset($toggleConfig['zf2_featureflags']['qandidate_toggle']['context_factory']);
 
+        $factory = null;
+
         if ($hasDefaultGlobalContextFactory) {
             $factory = $toggleConfig['zf2_featureflags']['qandidate_toggle']['context_factory'];
         }
@@ -47,6 +49,7 @@ class ToggleContextFactory implements FactoryInterface
         $context = new Context();
 
         if ($factory !== null && $serviceLocator->has($factory)) {
+            /** @var Context $context */
             $context = $serviceLocator->get($factory);
         }
 
