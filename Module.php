@@ -42,12 +42,12 @@ class Module implements ConfigProviderInterface,
     ServiceProviderInterface,
     ViewHelperProviderInterface,
     ControllerPluginProviderInterface,
-    InitProviderInterface,
+    // InitProviderInterface,
     ConsoleUsageProviderInterface
 {
     /**
      * @param ModuleManagerInterface $moduleManager
-     */
+     /
     public function init(ModuleManagerInterface $moduleManager)
     {
         $eventManager = $moduleManager->getEventManager();
@@ -56,7 +56,7 @@ class Module implements ConfigProviderInterface,
 
     /**
      * @param ModuleEvent $event
-     */
+     /
     public function onMergeConfig(ModuleEvent $event)
     {
         $config = $event->getConfigListener()->getMergedConfig(false);
