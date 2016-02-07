@@ -18,7 +18,6 @@
 
 namespace MehrAlsNix\FeatureToggle;
 
-use MehrAlsNix\FeatureToggle\Context\UserContextFactory;
 use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
@@ -82,10 +81,7 @@ class Module implements ConfigProviderInterface,
                     'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection()
                 ],
                 'factories' => [
-                    'ToggleFeature\UserContextFactory' => function ($serviceManager) {
-                        $storage = $serviceManager->get('Storage');
-                        return new UserContextFactory($storage);
-                    },
+                    'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
                     'Qandidate\Toggle\Manager' => Factory\ToggleManagerFactory::class,
                     'Qandidate\Toggle\Context' => Factory\ToggleContextFactory::class
                 ]

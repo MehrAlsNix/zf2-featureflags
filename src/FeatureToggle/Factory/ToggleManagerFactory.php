@@ -18,6 +18,7 @@
 
 namespace MehrAlsNix\FeatureToggle\Factory;
 
+use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleManager;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
@@ -40,6 +41,13 @@ class ToggleManagerFactory implements FactoryInterface
 
         $persistence = $toggleConfig['qandidate_toggle']['persistence'];
 
-        return new ToggleManager($serviceLocator->get($persistence));
+        /** @var ToggleCollection $coll */
+        $coll = $serviceLocator->get($persistence);
+
+        if (!$coll instanceof ToggleCollection) {
+            throw new ServiceNotFoundException();
+        }
+
+        return new ToggleManager($coll);
     }
 }

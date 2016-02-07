@@ -16,35 +16,33 @@
  * @link      http://github.com/MehrAlsNix/zf2-featureflags
  */
 
-namespace MehrAlsNix\FeatureToggle\Context;
+namespace MehrAlsNix\FeatureToggle\Factory;
 
+use MehrAlsNix\FeatureToggle\Context\UserContext;
 use Qandidate\Toggle\Context;
-use Qandidate\Toggle\ContextFactory;
 use Zend\Authentication\AuthenticationServiceInterface;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-/**
- * {@inheritDoc}
- */
-class UserContextFactory extends ContextFactory
+class UserContextFactory implements FactoryInterface
 {
-    /** @var AuthenticationServiceInterface $tokenStorage */
-    private $tokenStorage;
-
-    public function __construct(AuthenticationServiceInterface $storage)
-    {
-        $this->tokenStorage = $storage;
-    }
-
     /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return Context
+     *
+     * @throws ServiceNotFoundException
      */
-    public function createContext()
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $context = new Context();
-        $token = $this->tokenStorage->getIdentity();
-        if (null !== $token) {
-            $context->set('username', $this->tokenStorage->getIdentity());
-        }
-        return $context;
+        /** @var AuthenticationServiceInterface $storage */
+        $storage = $serviceLocator->get('FeatureToggle\Storage');
+
+        $userContext = new UserContext($storage);
+
+        return $userContext->createContext();
     }
 }

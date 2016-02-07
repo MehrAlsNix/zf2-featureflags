@@ -41,9 +41,7 @@ class ToggleListener extends AbstractListenerAggregate
         $classHolder = $event->getTarget();
         $classAnnotations = $classHolder->getAnnotations();
         foreach ($classAnnotations as $annotation) {
-            if ($annotation instanceof Toggle
-                && !$this->toggleManager->active($annotation->getName(), $this->getContext())
-            ) {
+            if ($annotation instanceof Toggle && !$this->isActive($annotation->getName())) {
                 throw new \RuntimeException();
             }
         }
@@ -51,9 +49,7 @@ class ToggleListener extends AbstractListenerAggregate
         $methodHolders = $classHolder->getMethods();
         foreach ($methodHolders as $methodHolder) {
             foreach ($methodHolder->getAnnotations() as $annotation) {
-                if ($annotation instanceof Toggle
-                    && !$this->toggleManager->active($annotation->getName(), $this->getContext())
-                ) {
+                if ($annotation instanceof Toggle && !$this->isActive($annotation->getName())) {
                     throw new \RuntimeException();
                 }
             }
