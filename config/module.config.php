@@ -16,13 +16,15 @@
  * @link      http://github.com/MehrAlsNix/zf2-featureflags
  */
 
+use MehrAlsNix\FeatureToggle\Listener\ToggleListener;
+
 return [
     'zf_annotation' => [
         'annotations' => [
             'Toggle'
         ],
         'event_listeners' => [
-            'ToggleListener'
+            ToggleListener::class
         ]
     ],
     'qandidate_toggle' => [
