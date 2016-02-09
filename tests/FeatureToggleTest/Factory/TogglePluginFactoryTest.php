@@ -2,10 +2,8 @@
 
 namespace MehrAlsNix\FeatureToggleTest\View\Helper;
 
-use MehrAlsNix\FeatureToggle\Context\UserContext;
-use MehrAlsNix\FeatureToggle\Factory\ToggleContextFactory;
 use MehrAlsNix\FeatureToggle\Factory\ToggleHelperFactory;
-use MehrAlsNix\FeatureToggle\Factory\UserContextFactory;
+use MehrAlsNix\FeatureToggle\Factory\TogglePluginFactory;
 use Qandidate\Toggle\Context;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Qandidate\Toggle\ToggleManager;
@@ -13,7 +11,7 @@ use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
+class TogglePluginFactoryTest extends AbstractHttpControllerTestCase
 {
     /**
      * @var ControllerManager
@@ -32,7 +30,7 @@ class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
 
     protected function setUp()
     {
-        $this->factory = new ToggleContextFactory();
+        $this->factory = new TogglePluginFactory();
         $this->services = $services = new ServiceManager();
         $this->services->setService('Config', [
             'zf2_featureflags' => [
@@ -59,14 +57,13 @@ class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
         ]);
         $this->controllers = $controllers = new ControllerManager();
         $controllers->setServiceLocator(new ServiceManager());
-        $controllers->getServiceLocator()->setFactory('ToggleFeature\UserContextFactory', UserContextFactory::class);
         $controllers->getServiceLocator()->setService('ServiceManager', $services);
         $this->setApplicationConfig([
             'modules' => [
                 'MehrAlsNix\FeatureToggle',
             ],
             'module_listener_options' => [
-                'module_paths' => [__DIR__ . '/../../../'],
+                'module_paths' => [__DIR__ . '/../../'],
                 'config_glob_paths' => [],
             ],
             'service_listener_options' => [],
@@ -86,6 +83,6 @@ class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
         $context = $this->getMockBuilder('Qandidate\Toggle\Context');
         $this->services->setService('ToggleContextFactory', $context->getMock());
 
-        $this->assertInstanceOf('Qandidate\Toggle\Context', $this->factory->createService($this->services));
+        $this->assertInstanceOf('MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin\FeatureToggle', $this->factory->createService($this->services));
     }
 }
