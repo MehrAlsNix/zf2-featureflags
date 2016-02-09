@@ -19,6 +19,7 @@
 namespace MehrAlsNix\FeatureToggle\Factory;
 
 use Qandidate\Toggle\Context;
+use Zend\Config\Config;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -36,15 +37,9 @@ class ToggleContextFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $toggleConfig = (array) $serviceLocator->get('config');
+        $toggleConfig = new Config($serviceLocator->get('config'));
 
-        $hasDefaultGlobalContextFactory = isset($toggleConfig['zf2_featureflags']['qandidate_toggle']['context_factory']);
-
-        $factory = null;
-
-        if ($hasDefaultGlobalContextFactory) {
-            $factory = $toggleConfig['zf2_featureflags']['qandidate_toggle']['context_factory'];
-        }
+        $factory = $toggleConfig->zf2_featureflags->qandidate_toggle->get('context_factory', null);
 
         $context = new Context();
 
