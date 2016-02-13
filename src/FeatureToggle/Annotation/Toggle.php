@@ -20,6 +20,9 @@ namespace MehrAlsNix\FeatureToggle\Annotation;
 
 use Zend\Code\Annotation\AnnotationInterface;
 
+/**
+ * @Annotation
+ */
 class Toggle implements AnnotationInterface
 {
     public $name;
