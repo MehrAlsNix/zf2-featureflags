@@ -22,6 +22,7 @@ use Zend\Code\Annotation\AnnotationInterface;
 
 /**
  * @Annotation
+ * @codeCoverageIgnore
  */
 class Toggle implements AnnotationInterface
 {
