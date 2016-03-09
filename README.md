@@ -8,16 +8,34 @@ The zf2-featureflags module uses `qandidate-labs/qandidate-toggle` and act as a 
  tbd
 ```
 
-## Usage
+## Example config
 
 ```
- tbd
+    'zf2_featureflags' => [
+        'qandidate_toggle' => [
+            'persistence' => 'ToggleFeature\InMemory'
+        ],
+        'features' => [
+            'some-feature' => [
+                'name' => 'disabled',
+                'conditions' => [],
+                'status' => 'inactive',
+            ],
+            'some-other' => [
+                'name' => 'enabled',
+                'conditions' => [],
+                'status' => 'always-active'
+            ]
+        ]
+    ]
 ```
+
+## Usage
 
 ### Controller Plugin
 
 ```
-if ($this->featureToggle()->isActive('featureA')) {
+if ($this->featureToggle()->isActive('some-feature')) {
     // Your featureA code goes here.
 }
 ```
@@ -25,7 +43,7 @@ if ($this->featureToggle()->isActive('featureA')) {
 ### View Helper
 
 ```
-<?php if ($this->featureToggle()->isActive('comments')) : ?>
+<?php if ($this->featureToggle()->isActive('some-other')) : ?>
     // Your comments code goes here.
 <?php endif; ?>
 ```
