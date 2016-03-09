@@ -39,7 +39,6 @@ use Zend\ModuleManager\ModuleManagerInterface;
  */
 class Module implements ConfigProviderInterface,
     AutoloaderProviderInterface,
-    ServiceProviderInterface,
     ViewHelperProviderInterface,
     ControllerPluginProviderInterface,
     // InitProviderInterface,
