@@ -104,8 +104,9 @@ class Module implements ConfigProviderInterface,
         return [
             'service_manager' => [
                 'aliases' => [
-                    'FeatureToggle\InMemory' => 'Qandidate\Toggle\Collection\InMemory',
-                    'FeatureToggle\Redis'    => 'Qandidate\Toggle\Collection\Predis'
+                    'FeatureToggle\InMemory'   => 'Qandidate\Toggle\Collection\InMemory',
+                    'FeatureToggle\Redis'      => 'Qandidate\Toggle\Collection\Predis',
+                    'Qandidate\Toggle\Manager' => 'ToggleManagerFactory'
                 ],
                 'services' => [
                     'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection(),
