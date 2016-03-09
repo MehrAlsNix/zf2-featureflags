@@ -21,6 +21,7 @@ namespace MehrAlsNix\FeatureToggle\Factory;
 use MehrAlsNix\FeatureToggle\Mvc;
 use Qandidate\Toggle\Context;
 use Qandidate\Toggle\ToggleManager;
+use Zend\Mvc\Controller\PluginManager;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -38,11 +39,16 @@ class TogglePluginFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        if ($serviceLocator instanceof PluginManager) {
+            $parentLocator = $serviceLocator->getServiceLocator();
+        } else {
+            $parentLocator = $serviceLocator;
+        }
         /** @var ToggleManager $toggleManager */
-        $toggleManager = $serviceLocator->get('ToggleManagerFactory');
+        $toggleManager = $parentLocator->get('ToggleManagerFactory');
 
         /** @var Context $toggleContext */
-        $toggleContext = $serviceLocator->get('ToggleContextFactory');
+        $toggleContext = $parentLocator->get('ToggleContextFactory');
 
         $featureToggle = new Mvc\Controller\Plugin\FeatureToggle();
         $featureToggle->setToggleManager($toggleManager);
