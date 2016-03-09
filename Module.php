@@ -99,35 +99,6 @@ class Module implements ConfigProviderInterface,
      *
      * @return array|\Zend\ServiceManager\Config
      */
-    public function getServiceConfig()
-    {
-        return [
-            'service_manager' => [
-                'aliases' => [
-                    'FeatureToggle\InMemory'   => 'Qandidate\Toggle\Collection\InMemory',
-                    'FeatureToggle\Redis'      => 'Qandidate\Toggle\Collection\Predis',
-                    'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
-                    'ToggleContextFactory' => 'Qandidate\Toggle\Context'
-                ],
-                'services' => [
-                    'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection(),
-                    'Qandidate\Toggle\Serializer\InMemoryCollectionSerializer' => new InMemoryCollectionSerializer(),
-                ],
-                'factories' => [
-                    'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
-                    'Qandidate\Toggle\Manager' => Factory\ToggleManagerFactory::class,
-                    'Qandidate\Toggle\Context' => Factory\ToggleContextFactory::class
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * Expected to return \Zend\ServiceManager\Config object or array to
-     * seed such an object.
-     *
-     * @return array|\Zend\ServiceManager\Config
-     */
     public function getViewHelperConfig()
     {
         return [

@@ -19,6 +19,23 @@
 use MehrAlsNix\FeatureToggle\Listener\ToggleListener;
 
 return [
+    'service_manager' => [
+        'aliases' => [
+            'FeatureToggle\InMemory'   => 'Qandidate\Toggle\Collection\InMemory',
+            'FeatureToggle\Redis'      => 'Qandidate\Toggle\Collection\Predis',
+            'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
+            'ToggleContextFactory' => 'Qandidate\Toggle\Context'
+        ],
+        'services' => [
+            'Qandidate\Toggle\Collection\InMemory' => new \Qandidate\Toggle\ToggleCollection\InMemoryCollection(),
+            'Qandidate\Toggle\Serializer\InMemoryCollectionSerializer' => new \Qandidate\Toggle\Serializer\InMemoryCollectionSerializer(),
+        ],
+        'factories' => [
+            'FeatureToggle\UserContextFactory' => \MehrAlsNix\FeatureToggle\Factory\UserContextFactory::class,
+            'Qandidate\Toggle\Manager' => \MehrAlsNix\FeatureToggle\Factory\ToggleManagerFactory::class,
+            'Qandidate\Toggle\Context' => \MehrAlsNix\FeatureToggle\Factory\ToggleContextFactory::class
+        ]
+    ],
     'zf_annotation' => [
         'annotations' => [
             'Toggle'
