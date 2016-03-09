@@ -106,7 +106,8 @@ class Module implements ConfigProviderInterface,
                 'aliases' => [
                     'FeatureToggle\InMemory'   => 'Qandidate\Toggle\Collection\InMemory',
                     'FeatureToggle\Redis'      => 'Qandidate\Toggle\Collection\Predis',
-                    'Qandidate\Toggle\Manager' => 'ToggleManagerFactory'
+                    'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
+                    'ToggleContextFactory' => 'Qandidate\Toggle\Context'
                 ],
                 'services' => [
                     'Qandidate\Toggle\Collection\InMemory' => new InMemoryCollection(),
