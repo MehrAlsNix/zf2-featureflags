@@ -45,7 +45,7 @@ class ToggleManagerFactory implements FactoryInterface
         $coll = $serviceLocator->get($persistence);
 
         if (!$coll instanceof ToggleCollection) {
-            throw new ServiceNotFoundException();
+            throw new ServiceNotFoundException('Service received is not of type ToggleCollection');
         }
 
         return new ToggleManager($coll);

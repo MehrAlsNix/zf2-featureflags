@@ -9,6 +9,7 @@ use MehrAlsNix\FeatureToggle\Factory\UserContextFactory;
 use Qandidate\Toggle\Context;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Qandidate\Toggle\ToggleManager;
+use Zend\Config\Config;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
@@ -57,9 +58,8 @@ class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ]);
-        $this->controllers = $controllers = new ControllerManager();
+        $this->controllers = $controllers = new ControllerManager($this->services);
         $controllers->setServiceLocator(new ServiceManager());
-        $controllers->getServiceLocator()->setFactory('ToggleFeature\UserContextFactory', UserContextFactory::class);
         $controllers->getServiceLocator()->setService('ServiceManager', $services);
         $this->setApplicationConfig([
             'modules' => [
@@ -70,7 +70,7 @@ class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
                 'config_glob_paths' => [],
             ],
             'service_listener_options' => [],
-            'service_manager' => [],
+            'service_manager' => []
         ]);
         parent::setUp();
     }
@@ -84,7 +84,7 @@ class ToggleContextFactoryTest extends AbstractHttpControllerTestCase
         $this->services->setService('ToggleManagerFactory', $toggleManager->getMock());
 
         $context = $this->getMockBuilder('Qandidate\Toggle\Context');
-        $this->services->setService('ToggleContextFactory', $context->getMock());
+        $this->services->setService('ToggleFeature\UserContextFactory', $context->getMock());
 
         $this->assertInstanceOf('Qandidate\Toggle\Context', $this->factory->createService($this->services));
     }

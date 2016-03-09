@@ -55,7 +55,7 @@ class TogglePluginFactoryTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ]);
-        $this->controllers = $controllers = new ControllerManager();
+        $this->controllers = $controllers = new ControllerManager($this->services);
         $controllers->setServiceLocator(new ServiceManager());
         $controllers->getServiceLocator()->setService('ServiceManager', $services);
         $this->setApplicationConfig([

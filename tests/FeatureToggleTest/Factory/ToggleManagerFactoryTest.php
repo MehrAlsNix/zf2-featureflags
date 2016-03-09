@@ -56,7 +56,7 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
                 ]
             ]
         ]);
-        $this->controllers = $controllers = new ControllerManager();
+        $this->controllers = $controllers = new ControllerManager($this->services);
         $controllers->setServiceLocator(new ServiceManager());
         $controllers->getServiceLocator()->setService('ServiceManager', $services);
         $this->setApplicationConfig([
@@ -80,6 +80,17 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
     {
         $context = $this->getMockBuilder('Qandidate\Toggle\ToggleCollection')->disableOriginalConstructor();
         $this->services->setService('ToggleFeature\InMemory', $context->getMock());
+
+        $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
+    }
+
+    /**
+     * @test
+     * @expectedException \Zend\ServiceManager\Exception\ServiceNotFoundException
+     */
+    public function cannotCreateService()
+    {
+        $this->services->setService('ToggleFeature\InMemory', new self);
 
         $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
     }
