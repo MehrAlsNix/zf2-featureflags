@@ -83,15 +83,4 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
 
         $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
     }
-
-    /**
-     * @test
-     * @expectedException \Zend\ServiceManager\Exception\ServiceNotFoundException
-     */
-    public function cannotCreateService()
-    {
-        $this->services->setService('ToggleFeature\InMemory', new self);
-
-        $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
-    }
 }
