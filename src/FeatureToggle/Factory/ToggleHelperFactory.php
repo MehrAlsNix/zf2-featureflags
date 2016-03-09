@@ -24,6 +24,7 @@ use Qandidate\Toggle\ToggleManager;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\HelperPluginManager;
 
 class ToggleHelperFactory implements FactoryInterface
 {
@@ -38,11 +39,16 @@ class ToggleHelperFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        if ($serviceLocator instanceof HelperPluginManager) {
+            $parentLocator = $serviceLocator->getServiceLocator();
+        } else {
+            $parentLocator = $serviceLocator;
+        }
         /** @var ToggleManager $toggleManager */
-        $toggleManager = $serviceLocator->get('ToggleManagerFactory');
+        $toggleManager = $parentLocator->get('ToggleManagerFactory');
 
         /** @var Context $toggleContext */
-        $toggleContext = $serviceLocator->get('ToggleContextFactory');
+        $toggleContext = $parentLocator->get('ToggleContextFactory');
 
         $featureToggle = new View\Helper\FeatureToggle();
         $featureToggle->setToggleManager($toggleManager);

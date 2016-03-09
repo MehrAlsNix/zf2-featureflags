@@ -19,10 +19,20 @@
 use MehrAlsNix\FeatureToggle\Listener\ToggleListener;
 
 return [
+    'view_helpers' => [
+        'factories' => [
+            'FeatureToggle' => \MehrAlsNix\FeatureToggle\Factory\ToggleHelperFactory::class
+        ]
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            'FeatureToggle' => \MehrAlsNix\FeatureToggle\Factory\TogglePluginFactory::class
+        ]
+    ],
     'service_manager' => [
         'aliases' => [
-            'FeatureToggle\InMemory'   => 'Qandidate\Toggle\Collection\InMemory',
-            'FeatureToggle\Redis'      => 'Qandidate\Toggle\Collection\Predis',
+            'ToggleFeature\InMemory' => 'Qandidate\Toggle\Collection\InMemory',
+            'ToggleFeature\Redis' => 'Qandidate\Toggle\Collection\Predis',
             'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
             'ToggleContextFactory' => 'Qandidate\Toggle\Context'
         ],
