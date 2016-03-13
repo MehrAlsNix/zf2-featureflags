@@ -54,10 +54,12 @@ return [
     'service_manager' => [
         'aliases' => [
             'ToggleFeature\InMemory' => Toggle\ToggleCollection\InMemoryCollection::class,
-            'ToggleFeature\InMemoryCollSerializer' => Toggle\Serializer\InMemoryCollectionSerializer::class,
             'ToggleFeature\Redis' => 'Qandidate\Toggle\Collection\Predis',
             'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
             'ToggleContextFactory' => 'Qandidate\Toggle\Context'
+        ],
+        'services' => [
+            'ToggleFeature\InMemoryCollSerializer' => new Qandidate\Toggle\Serializer\InMemoryCollectionSerializer()
         ],
         'factories' => [
             'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
