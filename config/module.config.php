@@ -31,19 +31,23 @@ return [
                 $helper = new \MehrAlsNix\FeatureToggle\View\Helper\FeatureToggle();
                 $helper->setToggleManager($toggleManager);
                 $helper->setContext($toggleContext);
+
+                return $helper;
             }
         ]
     ],
     'controller_plugins' => [
         'factories' => [
-            'FeatureToggle' => function ($plugin) {
-                $serviceLocator = $plugin->getServiceLocator();
+            'FeatureToggle' => function ($controllerPlugin) {
+                $serviceLocator = $controllerPlugin->getServiceLocator();
                 $toggleManager = $serviceLocator->get('ToggleManagerFactory');
                 $toggleContext = $serviceLocator->get('ToggleContextFactory');
 
-                $helper = new \MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin\FeatureToggle();
-                $helper->setToggleManager($toggleManager);
-                $helper->setContext($toggleContext);
+                $plugin = new \MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin\FeatureToggle();
+                $plugin->setToggleManager($toggleManager);
+                $plugin->setContext($toggleContext);
+
+                return $plugin;
             }
         ]
     ],
