@@ -1,5 +1,10 @@
 {
   "name": "mehr-als-nix/zf2-featureflags",
+  "description": "Feature toggling for ZF2. This module akt like an wrapper for qandidate-labs/qandidate-toggle.",
+  "keywords": ["zf2", "module", "feature-toggle"],
+  "support": {
+    "wiki": "https://github.com/MehrAlsNix/zf2-featureflags/wiki"
+  },
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
