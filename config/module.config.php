@@ -16,34 +16,33 @@
  * @link      http://github.com/MehrAlsNix/zf2-featureflags
  */
 
-use MehrAlsNix\FeatureToggle\Listener\ToggleListener;
+use MehrAlsNix\FeatureToggle\Factory;
+use MehrAlsNix\FeatureToggle\Listener;
+use Qandidate\Toggle;
 
 return [
     'view_helpers' => [
         'factories' => [
-            'FeatureToggle' => \MehrAlsNix\FeatureToggle\Factory\ToggleHelperFactory::class
+            'FeatureToggle' => Factory\ToggleHelperFactory::class
         ]
     ],
     'controller_plugins' => [
         'factories' => [
-            'FeatureToggle' => \MehrAlsNix\FeatureToggle\Factory\TogglePluginFactory::class
+            'FeatureToggle' => Factory\TogglePluginFactory::class
         ]
     ],
     'service_manager' => [
         'aliases' => [
-            'ToggleFeature\InMemory' => 'Qandidate\Toggle\Collection\InMemory',
+            'ToggleFeature\InMemory' => Toggle\ToggleCollection\InMemoryCollection::class,
+            'ToggleFeature\InMemoryCollSerializer' => Toggle\Serializer\InMemoryCollectionSerializer::class,
             'ToggleFeature\Redis' => 'Qandidate\Toggle\Collection\Predis',
             'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
             'ToggleContextFactory' => 'Qandidate\Toggle\Context'
         ],
         'factories' => [
-            'FeatureToggle\UserContextFactory' => \MehrAlsNix\FeatureToggle\Factory\UserContextFactory::class,
-            'Qandidate\Toggle\Manager' => \MehrAlsNix\FeatureToggle\Factory\ToggleManagerFactory::class,
-            'Qandidate\Toggle\Context' => \MehrAlsNix\FeatureToggle\Factory\ToggleContextFactory::class
-        ],
-        'invokables' => [
-            'Qandidate\Toggle\Collection\InMemory' => Qandidate\Toggle\ToggleCollection\InMemoryCollection::class,
-            'Qandidate\Toggle\Serializer\InMemoryCollectionSerializer' => Qandidate\Toggle\Serializer\InMemoryCollectionSerializer::class,
+            'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
+            'Qandidate\Toggle\Manager' => Factory\ToggleManagerFactory::class,
+            'Qandidate\Toggle\Context' => Factory\ToggleContextFactory::class
         ]
     ],
     'zf_annotation' => [
@@ -51,7 +50,7 @@ return [
             'Toggle'
         ],
         'event_listeners' => [
-            ToggleListener::class
+            Listener\ToggleListener::class
         ]
     ]
 ];

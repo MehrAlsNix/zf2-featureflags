@@ -1,11 +1,12 @@
 <?php
 
-namespace MehrAlsNix\FeatureToggleTest\View\Helper;
+namespace MehrAlsNix\FeatureToggleTest\Factory;
 
 use MehrAlsNix\FeatureToggle\Factory\ToggleHelperFactory;
 use MehrAlsNix\FeatureToggle\Factory\ToggleManagerFactory;
 use MehrAlsNix\FeatureToggle\Factory\TogglePluginFactory;
 use Qandidate\Toggle\Context;
+use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Qandidate\Toggle\ToggleManager;
 use Zend\Mvc\Controller\ControllerManager;
@@ -20,7 +21,7 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
     protected $controllers;
 
     /**
-     * @var ToggleHelperFactory
+     * @var ToggleManagerFactory
      */
     protected $factory;
 
@@ -78,8 +79,28 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
      */
     public function createService()
     {
-        $context = $this->getMockBuilder('Qandidate\Toggle\ToggleCollection')->disableOriginalConstructor();
-        $this->services->setService('ToggleFeature\InMemory', $context->getMock());
+        $context = $this->getMockBuilder('Qandidate\Toggle\Collection\InMemoryCollectionSerializer');
+        $mock = $context->setMethods(['deserialize'])->getMock();
+
+        $mock->method('deserialize')->willReturn(new InMemoryCollection());
+
+        $this->services->setService('ToggleFeature\InMemoryCollSerializer', $mock);
+
+        $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
+    }
+
+    /**
+     * @test
+     * @expectedException \Zend\ServiceManager\Exception\ServiceNotFoundException
+     */
+    public function createServiceWithWrongCollectionType()
+    {
+        $context = $this->getMockBuilder('Qandidate\Toggle\Collection\InMemoryCollectionSerializer');
+        $mock = $context->setMethods(['deserialize'])->getMock();
+
+        $mock->method('deserialize')->willReturn(null);
+
+        $this->services->setService('ToggleFeature\InMemoryCollSerializer', $mock);
 
         $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
     }

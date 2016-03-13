@@ -1,6 +1,6 @@
 <?php
 
-namespace MehrAlsNix\FeatureToggleTest\View\Helper;
+namespace MehrAlsNix\FeatureToggleTest\Factory;
 
 use MehrAlsNix\FeatureToggle\Context\UserContext;
 use MehrAlsNix\FeatureToggle\Factory\ToggleContextFactory;

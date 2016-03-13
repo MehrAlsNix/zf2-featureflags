@@ -38,10 +38,11 @@ class ToggleManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $coll = (new InMemoryCollectionSerializer())
-            ->deserialize(
-                $serviceLocator->get('config')['zf2_featureflags']['features']
-            );
+        $coll = $serviceLocator->get(
+            'ToggleFeature\InMemoryCollSerializer'
+        )->deserialize(
+            $serviceLocator->get('config')['zf2_featureflags']['features']
+        );
 
         if (!$coll instanceof ToggleCollection) {
             throw new ServiceNotFoundException(

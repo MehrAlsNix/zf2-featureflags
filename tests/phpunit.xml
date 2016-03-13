@@ -9,7 +9,7 @@
          backupGlobals="false"
          syntaxCheck="true"
 >
-    <testsuite name="ZfcUser Test Suite">
+    <testsuite name="FeatureToggle Test Suite">
         <directory>./FeatureToggleTest</directory>
     </testsuite>
 
