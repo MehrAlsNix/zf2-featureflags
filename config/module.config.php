@@ -23,9 +23,10 @@ use Qandidate\Toggle;
 return [
     'view_helpers' => [
         'factories' => [
-            'FeatureToggle' => function ($serviceManager) {
-                $toggleManager = $serviceManager->get('ToggleManagerFactory');
-                $toggleContext = $serviceManager->get('ToggleContextFactory');
+            'FeatureToggle' => function ($viewhelper) {
+                $serviceLocator = $viewhelper->getServiceLocator();
+                $toggleManager = $serviceLocator->get('ToggleManagerFactory');
+                $toggleContext = $serviceLocator->get('ToggleContextFactory');
 
                 $helper = new \MehrAlsNix\FeatureToggle\View\Helper\FeatureToggle();
                 $helper->setToggleManager($toggleManager);
@@ -35,9 +36,10 @@ return [
     ],
     'controller_plugins' => [
         'factories' => [
-            'FeatureToggle' => function ($serviceManager) {
-                $toggleManager = $serviceManager->get('ToggleManagerFactory');
-                $toggleContext = $serviceManager->get('ToggleContextFactory');
+            'FeatureToggle' => function ($plugin) {
+                $serviceLocator = $plugin->getServiceLocator();
+                $toggleManager = $serviceLocator->get('ToggleManagerFactory');
+                $toggleContext = $serviceLocator->get('ToggleContextFactory');
 
                 $helper = new \MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin\FeatureToggle();
                 $helper->setToggleManager($toggleManager);
