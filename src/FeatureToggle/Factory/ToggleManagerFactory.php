@@ -21,7 +21,6 @@ namespace MehrAlsNix\FeatureToggle\Factory;
 use Qandidate\Toggle\Serializer\InMemoryCollectionSerializer;
 use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleManager;
-use Zend\Config\Config;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -39,13 +38,15 @@ class ToggleManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $toggleConfig = new Config($serviceLocator->get('config'));
-
-        $serializer = new InMemoryCollectionSerializer();
-        $coll = $serializer->deserialize($toggleConfig['zf2_featureflags']['features']->toArray());
+        $coll = (new InMemoryCollectionSerializer())
+            ->deserialize(
+                $serviceLocator->get('config')['zf2_featureflags']['features']
+            );
 
         if (!$coll instanceof ToggleCollection) {
-            throw new ServiceNotFoundException('Service received is not of type ToggleCollection');
+            throw new ServiceNotFoundException(
+                'Service received is not of type ToggleCollection'
+            );
         }
 
         return new ToggleManager($coll);

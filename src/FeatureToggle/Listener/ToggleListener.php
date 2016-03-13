@@ -24,6 +24,9 @@ use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use ZfAnnotation\Event\ParseEvent;
 
+/**
+ * Abstract aggregate listener
+ */
 class ToggleListener extends AbstractListenerAggregate
 {
     use ToggleAware;

@@ -36,14 +36,14 @@ return [
             'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
             'ToggleContextFactory' => 'Qandidate\Toggle\Context'
         ],
-        'services' => [
-            'Qandidate\Toggle\Collection\InMemory' => new \Qandidate\Toggle\ToggleCollection\InMemoryCollection(),
-            'Qandidate\Toggle\Serializer\InMemoryCollectionSerializer' => new \Qandidate\Toggle\Serializer\InMemoryCollectionSerializer(),
-        ],
         'factories' => [
             'FeatureToggle\UserContextFactory' => \MehrAlsNix\FeatureToggle\Factory\UserContextFactory::class,
             'Qandidate\Toggle\Manager' => \MehrAlsNix\FeatureToggle\Factory\ToggleManagerFactory::class,
             'Qandidate\Toggle\Context' => \MehrAlsNix\FeatureToggle\Factory\ToggleContextFactory::class
+        ],
+        'invokables' => [
+            'Qandidate\Toggle\Collection\InMemory' => Qandidate\Toggle\ToggleCollection\InMemoryCollection::class,
+            'Qandidate\Toggle\Serializer\InMemoryCollectionSerializer' => Qandidate\Toggle\Serializer\InMemoryCollectionSerializer::class,
         ]
     ],
     'zf_annotation' => [

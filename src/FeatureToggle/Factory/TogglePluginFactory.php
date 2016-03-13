@@ -39,11 +39,12 @@ class TogglePluginFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $parentLocator = $serviceLocator;
+
         if ($serviceLocator instanceof PluginManager) {
             $parentLocator = $serviceLocator->getServiceLocator();
-        } else {
-            $parentLocator = $serviceLocator;
         }
+
         /** @var ToggleManager $toggleManager */
         $toggleManager = $parentLocator->get('ToggleManagerFactory');
 
