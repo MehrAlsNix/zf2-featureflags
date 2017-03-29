@@ -14,7 +14,7 @@
     }
   ],
   "require": {
-    "qandidate/toggle": "^0.4",
+    "qandidate/toggle": "^1.0",
     "zendframework/zend-servicemanager": "^2.7",
     "zendframework/zend-modulemanager": "^2.6",
     "zendframework/zend-mvc": "^2.6",
