@@ -38,8 +38,8 @@ return [
             'ToggleManagerFactory' => 'Qandidate\Toggle\Manager',
             'ToggleContextFactory' => 'Qandidate\Toggle\Context'
         ],
-        'services' => [
-            'ToggleFeature\InMemoryCollSerializer' => new Qandidate\Toggle\Serializer\InMemoryCollectionSerializer()
+        'invokables' => [
+            'ToggleFeature\InMemoryCollSerializer' => Toggle\Serializer\InMemoryCollectionSerializer::class
         ],
         'factories' => [
             'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
