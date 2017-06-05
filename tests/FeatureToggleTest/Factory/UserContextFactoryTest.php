@@ -2,13 +2,12 @@
 
 namespace MehrAlsNix\FeatureToggleTest\Factory;
 
-use MehrAlsNix\FeatureToggle\Context\UserContext;
-use MehrAlsNix\FeatureToggle\Factory\ToggleContextFactory;
-use MehrAlsNix\FeatureToggle\Factory\ToggleHelperFactory;
 use MehrAlsNix\FeatureToggle\Factory\UserContextFactory;
 use Zend\Mvc\Controller\ControllerManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use Qandidate\Toggle\Context;
+use Zend\Authentication\AuthenticationServiceInterface;
 
 class UserContextFactoryTest extends AbstractHttpControllerTestCase
 {
@@ -18,7 +17,7 @@ class UserContextFactoryTest extends AbstractHttpControllerTestCase
     protected $controllers;
 
     /**
-     * @var ToggleHelperFactory
+     * @var UserContextFactory
      */
     protected $factory;
 
@@ -29,9 +28,7 @@ class UserContextFactoryTest extends AbstractHttpControllerTestCase
 
     protected function setUp()
     {
-        $this->factory = new UserContextFactory();
-        $this->services = $services = new ServiceManager();
-        $this->services->setService('Config', [
+        $config = [
             'zf2_featureflags' => [
                 'qandidate_toggle' => [
                     'persistence' => 'ToggleFeature\InMemory', // 'ToggleFeature\Redis'
@@ -53,10 +50,13 @@ class UserContextFactoryTest extends AbstractHttpControllerTestCase
                     ]
                 ]
             ]
-        ]);
-        $this->controllers = $controllers = new ControllerManager($this->services);
-        $controllers->setServiceLocator(new ServiceManager());
-        $controllers->getServiceLocator()->setService('ServiceManager', $services);
+        ];
+
+        $this->factory = new UserContextFactory();
+        $this->services = new ServiceManager();
+        $this->services->setFactory('FeatureToggle\UserContextFactory', $this->factory);
+
+        $this->controllers = new ControllerManager($this->services, $config);
         $this->setApplicationConfig([
             'modules' => [
                 'MehrAlsNix\FeatureToggle',
@@ -76,9 +76,9 @@ class UserContextFactoryTest extends AbstractHttpControllerTestCase
      */
     public function createService()
     {
-        $toggleManager = $this->getMockBuilder('Zend\Authentication\AuthenticationServiceInterface')->disableOriginalConstructor();
+        $toggleManager = $this->getMockBuilder(AuthenticationServiceInterface::class)->disableOriginalConstructor();
         $this->services->setService('FeatureToggle\Storage', $toggleManager->getMock());
 
-        $this->assertInstanceOf('Qandidate\Toggle\Context', $this->factory->createService($this->services));
+        $this->assertInstanceOf(Context::class, $this->factory->__invoke($this->services));
     }
 }

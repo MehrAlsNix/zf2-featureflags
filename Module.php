@@ -31,6 +31,7 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
+use Zend\Loader\StandardAutoloader;
 
 /**
  * Class Module
@@ -74,7 +75,7 @@ class Module implements ConfigProviderInterface,
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\StandardAutoloader' => [
+            StandardAutoloader::class => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/',
                 ]
@@ -103,7 +104,7 @@ class Module implements ConfigProviderInterface,
         return [
             'view_helpers' => [
                 'factories' => [
-                    'FeatureToggle' => Factory\ToggleHelperFactory::class
+                    'FeatureToggle' => Factory\FeatureToggleViewHelperFactory::class
                 ]
             ]
         ];
@@ -120,7 +121,7 @@ class Module implements ConfigProviderInterface,
         return [
             'controller_plugins' => [
                 'factories' => [
-                    'FeatureToggle' => Factory\TogglePluginFactory::class
+                    'FeatureToggle' => Factory\FeatureToggleControllerPluginFactory::class
                 ]
             ]
         ];

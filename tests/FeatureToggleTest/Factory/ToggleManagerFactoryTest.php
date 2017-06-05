@@ -10,6 +10,10 @@ use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Qandidate\Toggle\ToggleManager;
 use Zend\Mvc\Controller\ControllerManager;
+use Zend\Mvc\Service\ConfigFactory;
+use Zend\Mvc\Service\EventManagerFactory;
+use Zend\Mvc\Service\ModuleManagerFactory;
+use Zend\Mvc\Service\ServiceListenerFactory;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
@@ -32,36 +36,40 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
 
     protected function setUp()
     {
-        $this->factory = new ToggleManagerFactory();
-        $this->services = $services = new ServiceManager();
-        $this->services->setService('Config', [
-            'zf2_featureflags' => [
-                'qandidate_toggle' => [
-                    'persistence' => 'ToggleFeature\InMemory', // 'ToggleFeature\Redis'
-                    'context_factory' => 'ToggleFeature\UserContextFactory', // |your.context_factory.service.id
-                    'redis_namespace' => null, // toggle_%kernel.environment% # default, only required when persistence = redis
-                    'redis_client' => null // |your.redis_client.service.id # only required when persistence = redis
-                ],
-                'features' => [
-                    'some-feature' => [
-                        'name' => 'toggling',
-                        'conditions' => [
-                            [
-                                'name' => 'operator-condition',
-                                'key' => 'user_id',
-                                'operator' => ['name' => 'greater-than', 'value' => 41],
+        $config = [
+                'zf2_featureflags' => [
+                    'qandidate_toggle' => [
+                        'persistence' => 'ToggleFeature\InMemory', // 'ToggleFeature\Redis'
+                        'context_factory' => 'ToggleFeature\UserContextFactory', // |your.context_factory.service.id
+                        'redis_namespace' => null, // toggle_%kernel.environment% # default, only required when persistence = redis
+                        'redis_client' => null // |your.redis_client.service.id # only required when persistence = redis
+                    ],
+                    'features' => [
+                        'some-feature' => [
+                            'name' => 'toggling',
+                            'conditions' => [
+                                [
+                                    'name' => 'operator-condition',
+                                    'key' => 'user_id',
+                                    'operator' => ['name' => 'greater-than', 'value' => 41],
+                                ],
                             ],
-                        ],
-                        'status' => 'conditionally-active',
+                            'status' => 'conditionally-active',
+                        ]
                     ]
                 ]
-            ]
-        ]);
-        $this->controllers = $controllers = new ControllerManager($this->services);
-        $controllers->setServiceLocator(new ServiceManager());
-        $controllers->getServiceLocator()->setService('ServiceManager', $services);
-        $this->setApplicationConfig([
+        ];
+
+        $this->factory = new ToggleManagerFactory();
+        $this->services = new ServiceManager();
+        $this->services->setFactory('Qandidate\Toggle\Manager', $this->factory);
+        $this->services->setFactory('config', function () use ($config) { return $config; });
+        $this->services->setFactory('ModuleManager', ModuleManagerFactory::class);
+        $this->services->setFactory('ServiceListener', ServiceListenerFactory::class);
+        $this->services->setFactory('EventManager', EventManagerFactory::class);
+        $this->services->setService('ApplicationConfig', [
             'modules' => [
+                'Zend\Router',
                 'MehrAlsNix\FeatureToggle',
             ],
             'module_listener_options' => [
@@ -71,6 +79,9 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
             'service_listener_options' => [],
             'service_manager' => [],
         ]);
+
+        $this->controllers = new ControllerManager($this->services, $config);
+
         parent::setUp();
     }
 
@@ -86,7 +97,7 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
 
         $this->services->setService('ToggleFeature\InMemoryCollSerializer', $mock);
 
-        $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
+        $this->assertInstanceOf(ToggleManager::class, $this->factory->__invoke($this->services));
     }
 
     /**
@@ -102,6 +113,6 @@ class ToggleManagerFactoryTest extends AbstractHttpControllerTestCase
 
         $this->services->setService('ToggleFeature\InMemoryCollSerializer', $mock);
 
-        $this->assertInstanceOf('Qandidate\Toggle\ToggleManager', $this->factory->createService($this->services));
+        $this->assertInstanceOf(ToggleManager::class, $this->factory->__invoke($this->services));
     }
 }

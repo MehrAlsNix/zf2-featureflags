@@ -16,37 +16,40 @@
  * @link      http://github.com/MehrAlsNix/zf2-featureflags
  */
 
-namespace MehrAlsNix\FeatureToggle\Factory;
+namespace MehrAlsNix\FeatureToggle\Context;
 
-use Interop\Container\ContainerInterface;
 use Qandidate\Toggle\Context;
-use Zend\Config\Config;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Qandidate\Toggle\ContextFactory;
+use Zend\Http\PhpEnvironment\Request;
 
-class ToggleContextFactory implements FactoryInterface
+/**
+ * Context factory is implemented in an application to provide the context for
+ * feature flipping.
+ */
+class EnvContext extends ContextFactory
 {
-    /**
-     * Create an object
-     *
-     * @param  ContainerInterface $container
-     * @param  string $requestedName
-     * @param  null|array $options
-     *
-     * @return Context
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    public function __invoke(ContainerInterface $container, $requestedName = '', array $options = null)
+    /** @var string $name */
+    private $name = '';
+
+    /** @var Request $request */
+    private $request;
+
+    public function __construct($name, Request $request)
     {
-        $factory = (new Config($container->get('config')))['zf2_featureflags']['qandidate_toggle']['context_factory'];
+        $this->name = $name;
+        $this->request = $request;
+    }
 
+    /**
+     * @return Context
+     */
+    public function createContext()
+    {
         $context = new Context();
-
-        if ($factory !== null && $container->has($factory)) {
-            /** @var Context $context */
-            $context = $container->get($factory);
+        $env = $this->request->getEnv($this->name);
+        if ($env !== null) {
+            $context->set('env', $env);
         }
-
         return $context;
     }
 }

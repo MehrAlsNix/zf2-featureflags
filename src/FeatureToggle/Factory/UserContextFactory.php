@@ -18,11 +18,12 @@
 
 namespace MehrAlsNix\FeatureToggle\Factory;
 
-use MehrAlsNix\FeatureToggle\Context\UserContext;
+use Interop\Container\ContainerInterface;
 use Qandidate\Toggle\Context;
+use MehrAlsNix\FeatureToggle\Context\UserContext;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class UserContextFactory implements FactoryInterface
@@ -30,16 +31,18 @@ class UserContextFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
      *
      * @return Context
      *
-     * @throws ServiceNotFoundException
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName = '', array $options = null)
     {
         /** @var AuthenticationServiceInterface $storage */
-        $storage = $serviceLocator->get('FeatureToggle\Storage');
+        $storage = $container->get('FeatureToggle\Storage');
 
         $userContext = new UserContext($storage);
 

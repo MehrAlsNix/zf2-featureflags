@@ -16,6 +16,7 @@
  * @link      http://github.com/MehrAlsNix/zf2-featureflags
  */
 
+use MehrAlsNix\FeatureToggle\Annotation\Toggle as AnnotationToggle;
 use MehrAlsNix\FeatureToggle\Factory;
 use MehrAlsNix\FeatureToggle\Listener;
 use Qandidate\Toggle;
@@ -48,9 +49,9 @@ return [
         ]
     ],
     'zf_annotation' => [
-        'annotations' => [
-            'Toggle'
-        ],
+        'namespaces' => array(
+            AnnotationToggle::class => __DIR__ . '/../src/FeatureToggle/Annotation'
+        ),
         'event_listeners' => [
             Listener\ToggleListener::class
         ]

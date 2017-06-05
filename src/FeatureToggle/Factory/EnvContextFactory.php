@@ -18,37 +18,44 @@
 
 namespace MehrAlsNix\FeatureToggle\Factory;
 
-use Interop\Container\ContainerInterface;
-use Qandidate\Toggle\ToggleCollection;
-use Qandidate\Toggle\ToggleManager;
+use MehrAlsNix\FeatureToggle\Context\EnvContext;
+use Qandidate\Toggle\Context;
+use Zend\Http\PhpEnvironment\Request;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ToggleManagerFactory implements FactoryInterface
+class EnvContextFactory implements FactoryInterface
 {
+    private $name = '';
+
+    public function __construct($name = '')
+    {
+        $this->name = $name;
+    }
+
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return ToggleManager
-     * @throws \Zend\ServiceManager\Exception\ServiceNotFoundException
+     * @return Context
+     *
+     * @throws ServiceNotFoundException
      */
-    public function __invoke(ContainerInterface $container, $requestedName = '', array $options = null)
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $coll = $container->get(
-            'ToggleFeature\InMemoryCollSerializer'
-        )->deserialize(
-            $container->get('config')['zf2_featureflags']['features']
-        );
+        $name = $this->name;
 
-        if (!$coll instanceof ToggleCollection) {
-            throw new ServiceNotFoundException(
-                'Service received is not of type ToggleCollection'
-            );
+        if ($name === '') {
+            $name = $serviceLocator->get('Config')['zf2_featureflags']['envContext'];
         }
 
-        return new ToggleManager($coll);
+        /** @var Request $request */
+        $request = $serviceLocator->get('Request');
+
+        $envContext = new EnvContext($name, $request);
+
+        return $envContext->createContext();
     }
 }
