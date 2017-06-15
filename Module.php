@@ -18,16 +18,11 @@
 
 namespace MehrAlsNix\FeatureToggle;
 
-use Qandidate\Toggle\Serializer\InMemoryCollectionSerializer;
-use Qandidate\Toggle\ToggleCollection;
-use Qandidate\Toggle\ToggleCollection\InMemoryCollection;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ControllerPluginProviderInterface;
-use Zend\ModuleManager\Feature\InitProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
@@ -42,7 +37,6 @@ class Module implements ConfigProviderInterface,
     AutoloaderProviderInterface,
     ViewHelperProviderInterface,
     ControllerPluginProviderInterface,
-    // InitProviderInterface,
     ConsoleUsageProviderInterface
 {
     /**
