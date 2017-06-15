@@ -47,27 +47,27 @@ class Module implements ConfigProviderInterface,
 {
     /**
      * @param ModuleManagerInterface $moduleManager
-     /
-    public function init(ModuleManagerInterface $moduleManager)
-    {
-        $eventManager = $moduleManager->getEventManager();
-        $eventManager->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig']);
-    }
-
-    /**
+    /
+     * public function init(ModuleManagerInterface $moduleManager)
+     * {
+     * $eventManager = $moduleManager->getEventManager();
+     * $eventManager->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig']);
+     * }
+     *
+     * /**
      * @param ModuleEvent $event
-     /
-    public function onMergeConfig(ModuleEvent $event)
-    {
-        $config = $event->getConfigListener()->getMergedConfig(false);
-
-        $event->
-        $serializer = new InMemoryCollectionSerializer();
-        $collection = $serializer->deserialize($data);
-        $manager    = new ToggleManager($collection);
-    }
-
-    /**
+    /
+     * public function onMergeConfig(ModuleEvent $event)
+     * {
+     * $config = $event->getConfigListener()->getMergedConfig(false);
+     *
+     * $event->
+     * $serializer = new InMemoryCollectionSerializer();
+     * $collection = $serializer->deserialize($data);
+     * $manager    = new ToggleManager($collection);
+     * }
+     *
+     * /**
      * Retrieve autoloader configuration
      *
      * @return array
@@ -102,10 +102,11 @@ class Module implements ConfigProviderInterface,
     public function getViewHelperConfig()
     {
         return [
-            'view_helpers' => [
-                'factories' => [
-                    'FeatureToggle' => Factory\FeatureToggleViewHelperFactory::class
-                ]
+            'aliases' => [
+                'featureToggle' => 'FeatureToggle',
+            ],
+            'factories' => [
+                'FeatureToggle' => Factory\FeatureToggleViewHelperFactory::class
             ]
         ];
     }
@@ -119,10 +120,11 @@ class Module implements ConfigProviderInterface,
     public function getControllerPluginConfig()
     {
         return [
-            'controller_plugins' => [
-                'factories' => [
-                    'FeatureToggle' => Factory\FeatureToggleControllerPluginFactory::class
-                ]
+            'aliases' => [
+                'featureToggle' => 'FeatureToggle',
+            ],
+            'factories' => [
+                'FeatureToggle' => Factory\FeatureToggleControllerPluginFactory::class
             ]
         ];
     }
