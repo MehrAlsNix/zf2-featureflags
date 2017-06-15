@@ -18,11 +18,12 @@
 
 namespace MehrAlsNix\FeatureToggle\Factory;
 
+use Interop\Container\ContainerInterface;
 use MehrAlsNix\FeatureToggle\Context\EnvContext;
 use Qandidate\Toggle\Context;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class EnvContextFactory implements FactoryInterface
@@ -32,6 +33,22 @@ class EnvContextFactory implements FactoryInterface
     public function __construct($name = '')
     {
         $this->name = $name;
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName = '', array $options = null)
+    {
+        $name = $this->name;
+
+        if ($name === '') {
+            $name = $container->get('Config')['zf2_featureflags']['envContext'];
+        }
+
+        /** @var Request $request */
+        $request = $container->get('Request');
+
+        $envContext = new EnvContext($name, $request);
+
+        return $envContext->createContext();
     }
 
     /**
@@ -45,17 +62,6 @@ class EnvContextFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $name = $this->name;
-
-        if ($name === '') {
-            $name = $serviceLocator->get('Config')['zf2_featureflags']['envContext'];
-        }
-
-        /** @var Request $request */
-        $request = $serviceLocator->get('Request');
-
-        $envContext = new EnvContext($name, $request);
-
-        return $envContext->createContext();
+        return $this($serviceLocator->getServiceLocator());
     }
 }

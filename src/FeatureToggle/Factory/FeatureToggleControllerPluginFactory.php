@@ -18,13 +18,40 @@
 
 namespace MehrAlsNix\FeatureToggle\Factory;
 
+use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin\FeatureToggle;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class FeatureToggleControllerPluginFactory implements FactoryInterface
 {
+    /**
+     * Create an object
+     *
+     * @param  ContainerInterface $container
+     * @param  string $requestedName
+     * @param  null|array $options
+     * @return object
+     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotCreatedException if an exception is raised when
+     *     creating a service.
+     * @throws ContainerException if any other error occurs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName = '', array $options = null)
+    {
+        $toggleManager = $container->get('ToggleManagerFactory');
+        $toggleContext = $container->get('ToggleContextFactory');
+
+        $plugin = new FeatureToggle();
+        $plugin->setToggleManager($toggleManager);
+        $plugin->setContext($toggleContext);
+
+        return $plugin;
+    }
+
     /**
      * Create service
      *
@@ -36,14 +63,6 @@ class FeatureToggleControllerPluginFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $serviceLocator = $serviceLocator->getServiceLocator();
-        $toggleManager = $serviceLocator->get('ToggleManagerFactory');
-        $toggleContext = $serviceLocator->get('ToggleContextFactory');
-
-        $plugin = new FeatureToggle();
-        $plugin->setToggleManager($toggleManager);
-        $plugin->setContext($toggleContext);
-
-        return $plugin;
+        return $this($serviceLocator->getServiceLocator());
     }
 }
