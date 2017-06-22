@@ -23,7 +23,7 @@ use MehrAlsNix\FeatureToggle\Context\EnvContext;
 use Qandidate\Toggle\Context;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class EnvContextFactory implements FactoryInterface

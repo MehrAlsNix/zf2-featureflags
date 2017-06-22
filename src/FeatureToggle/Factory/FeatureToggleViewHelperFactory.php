@@ -23,7 +23,7 @@ use Interop\Container\Exception\ContainerException;
 use MehrAlsNix\FeatureToggle\View\Helper\FeatureToggle;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class FeatureToggleViewHelperFactory implements FactoryInterface

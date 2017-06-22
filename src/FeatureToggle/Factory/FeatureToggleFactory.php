@@ -20,13 +20,13 @@ namespace MehrAlsNix\FeatureToggle\Factory;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin\FeatureToggle;
+use MehrAlsNix\FeatureToggle\Service\FeatureToggle;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class FeatureToggleControllerPluginFactory implements FactoryInterface
+class FeatureToggleFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -40,16 +40,16 @@ class FeatureToggleControllerPluginFactory implements FactoryInterface
      *     creating a service.
      * @throws ContainerException if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName = '', array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $toggleManager = $container->get('ToggleManagerFactory');
         $toggleContext = $container->get('ToggleContextFactory');
 
-        $plugin = new FeatureToggle();
-        $plugin->setToggleManager($toggleManager);
-        $plugin->setContext($toggleContext);
+        $service = new FeatureToggle();
+        $service->setToggleManager($toggleManager);
+        $service->setContext($toggleContext);
 
-        return $plugin;
+        return $service;
     }
 
     /**
@@ -63,6 +63,6 @@ class FeatureToggleControllerPluginFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator->getServiceLocator());
+        return $this($serviceLocator);
     }
 }

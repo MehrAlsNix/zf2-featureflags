@@ -43,6 +43,7 @@ return [
             'ToggleFeature\InMemoryCollSerializer' => Toggle\Serializer\InMemoryCollectionSerializer::class
         ],
         'factories' => [
+            'FeatureToggle' => Factory\FeatureToggleFactory::class,
             'FeatureToggle\UserContextFactory' => Factory\UserContextFactory::class,
             'Qandidate\Toggle\Manager' => Factory\ToggleManagerFactory::class,
             'Qandidate\Toggle\Context' => Factory\ToggleContextFactory::class
