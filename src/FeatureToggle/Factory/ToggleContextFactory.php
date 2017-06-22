@@ -21,7 +21,8 @@ namespace MehrAlsNix\FeatureToggle\Factory;
 use Interop\Container\ContainerInterface;
 use Qandidate\Toggle\Context;
 use Zend\Config\Config;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ToggleContextFactory implements FactoryInterface
 {
@@ -48,5 +49,16 @@ class ToggleContextFactory implements FactoryInterface
         }
 
         return $context;
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator);
     }
 }

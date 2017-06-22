@@ -18,12 +18,12 @@
 
 namespace MehrAlsNix\FeatureToggle\View\Helper;
 
-use MehrAlsNix\FeatureToggle\Traits\ToggleAware;
+use MehrAlsNix\FeatureToggle\Traits\ToggleTrait;
 use Zend\View\Helper\AbstractHelper;
 
 class FeatureToggle extends AbstractHelper
 {
-    use ToggleAware;
+    use ToggleTrait;
 
     /**
      * @return $this

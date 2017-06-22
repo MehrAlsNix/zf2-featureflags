@@ -22,7 +22,7 @@ use Interop\Container\ContainerInterface;
 use Qandidate\Toggle\ToggleCollection;
 use Qandidate\Toggle\ToggleManager;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ToggleManagerFactory implements FactoryInterface
@@ -50,5 +50,16 @@ class ToggleManagerFactory implements FactoryInterface
         }
 
         return new ToggleManager($coll);
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator);
     }
 }

@@ -49,9 +49,9 @@ return [
         ]
     ],
     'zf_annotation' => [
-        'namespaces' => array(
+        'namespaces' => [
             AnnotationToggle::class => __DIR__ . '/../src/FeatureToggle/Annotation'
-        ),
+        ],
         'event_listeners' => [
             Listener\ToggleListener::class
         ]

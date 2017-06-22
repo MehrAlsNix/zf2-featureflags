@@ -18,12 +18,12 @@
 
 namespace MehrAlsNix\FeatureToggle\Mvc\Controller\Plugin;
 
-use MehrAlsNix\FeatureToggle\Traits\ToggleAware;
+use MehrAlsNix\FeatureToggle\Traits\ToggleTrait;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 
 class FeatureToggle extends AbstractPlugin
 {
-    use ToggleAware;
+    use ToggleTrait;
 
     /**
      * @return $this

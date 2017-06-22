@@ -62,6 +62,6 @@ class EnvContextFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator->getServiceLocator());
+        return $this($serviceLocator);
     }
 }

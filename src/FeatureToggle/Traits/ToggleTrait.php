@@ -21,7 +21,7 @@ namespace MehrAlsNix\FeatureToggle\Traits;
 use Qandidate\Toggle\Context;
 use Qandidate\Toggle\ToggleManager;
 
-trait ToggleAware
+trait ToggleTrait
 {
     /** @var ToggleManager $toggleManager */
     protected $toggleManager;

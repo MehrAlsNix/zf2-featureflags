@@ -19,7 +19,7 @@
 namespace MehrAlsNix\FeatureToggle\Listener;
 
 use MehrAlsNix\FeatureToggle\Annotation\Toggle;
-use MehrAlsNix\FeatureToggle\Traits\ToggleAware;
+use MehrAlsNix\FeatureToggle\Traits\ToggleTrait;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use ZfAnnotation\Event\ParseEvent;
@@ -29,7 +29,7 @@ use ZfAnnotation\Event\ParseEvent;
  */
 class ToggleListener extends AbstractListenerAggregate
 {
-    use ToggleAware;
+    use ToggleTrait;
 
     /**
      * @param EventManagerInterface $events

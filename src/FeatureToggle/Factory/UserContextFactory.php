@@ -22,8 +22,7 @@ use Interop\Container\ContainerInterface;
 use Qandidate\Toggle\Context;
 use MehrAlsNix\FeatureToggle\Context\UserContext;
 use Zend\Authentication\AuthenticationServiceInterface;
-use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class UserContextFactory implements FactoryInterface
@@ -47,5 +46,16 @@ class UserContextFactory implements FactoryInterface
         $userContext = new UserContext($storage);
 
         return $userContext->createContext();
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator);
     }
 }
